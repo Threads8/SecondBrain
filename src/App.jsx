@@ -469,6 +469,7 @@ function ProfileMenu({ user, onLogout }) {
   const [position, setPosition] = useState({ x: window.innerWidth - 180, y: 16 });
   const [isDragging, setIsDragging] = useState(false);
   const dragInfo = useRef({ isDragging: false, startX: 0, startY: 0, offsetX: 0, offsetY: 0 });
+  const didDragRef = useRef(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('profileMenuPos');
@@ -503,6 +504,7 @@ function ProfileMenu({ user, onLogout }) {
 
   const handlePointerDown = (e) => {
     if (e.target.closest('.dropdown-menu')) return;
+    didDragRef.current = false;
     const rect = menuRef.current.getBoundingClientRect();
     dragInfo.current = { isDragging: false, startX: e.clientX, startY: e.clientY, offsetX: e.clientX - rect.left, offsetY: e.clientY - rect.top };
     document.addEventListener('pointermove', handlePointerMove);
@@ -514,8 +516,9 @@ function ProfileMenu({ user, onLogout }) {
     const dx = Math.abs(e.clientX - dragInfo.current.startX);
     const dy = Math.abs(e.clientY - dragInfo.current.startY);
 
-    if (!dragInfo.current.isDragging && (dx > 3 || dy > 3)) {
+    if (!dragInfo.current.isDragging && (dx > 5 || dy > 5)) {
       dragInfo.current.isDragging = true;
+      didDragRef.current = true;
       setIsDragging(true);
       setIsOpen(false);
     }
@@ -534,6 +537,7 @@ function ProfileMenu({ user, onLogout }) {
   const handlePointerUp = (e) => {
     if (dragInfo.current?.isDragging) {
       localStorage.setItem('profileMenuPos', JSON.stringify(position));
+      setTimeout(() => { didDragRef.current = false; }, 50);
     }
     setIsDragging(false);
     dragInfo.current = null;
@@ -541,7 +545,7 @@ function ProfileMenu({ user, onLogout }) {
     document.removeEventListener('pointerup', handlePointerUp);
   };
 
-  const toggleMenu = (e) => { if (!dragInfo.current?.isDragging) setIsOpen(!isOpen); };
+  const toggleMenu = (e) => { if (!didDragRef.current) setIsOpen(!isOpen); };
 
   const isGuest = user.isAnonymous;
   const displayName = user.displayName || (isGuest ? 'Guest User' : user.email?.split('@')[0]) || 'User';
@@ -561,7 +565,7 @@ function ProfileMenu({ user, onLogout }) {
         className={`flex items-center gap-2 p-1.5 pr-3 rounded-full bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 shadow-2xl transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/50 hover:bg-slate-800/80 ${isDragging ? 'scale-105 shadow-indigo-500/20' : ''}`}
       >
         {user.photoURL && !isGuest ? (
-          <img src={user.photoURL} alt="Profile" className="w-8 h-8 rounded-full bg-slate-700 pointer-events-none select-none" />
+          <img src={user.photoURL} alt="Profile" className="w-8 h-8 rounded-full bg-slate-700 pointer-events-none select-none" draggable="false" />
         ) : (
           <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-sm font-bold text-white shadow-inner pointer-events-none select-none">{initial}</div>
         )}
@@ -999,7 +1003,7 @@ ONLY JSON
       {!isSidebarOpen && (
         <div 
           onClick={() => setIsSidebarOpen(true)} 
-          className="fixed top-3 left-3 z-[60] flex items-center gap-2 cursor-pointer group px-2.5 py-1.5 bg-[#1a1a1a]/90 backdrop-blur-md rounded-lg border border-[#3a3a3a] shadow-xl hover:border-[#4f4f4f] transition-all animate-in fade-in zoom-in-95 duration-300"
+          className="md:hidden fixed top-3 left-3 z-[60] flex items-center gap-2 cursor-pointer group px-2.5 py-1.5 bg-[#1a1a1a]/90 backdrop-blur-md rounded-lg border border-[#3a3a3a] shadow-xl hover:border-[#4f4f4f] transition-all animate-in fade-in zoom-in-95 duration-300"
           title="Open Sidebar"
         >
           <div className="w-6 h-6 bg-indigo-500 rounded flex items-center justify-center shadow-md">

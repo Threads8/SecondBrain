@@ -286,7 +286,7 @@ export default function Editor({ note, notes, updateNote, handlePreviewClick, ha
       />
 
       {editTags.length > 0 && (
-        <div className="px-6 sm:px-12 md:px-24 lg:px-48 py-2 flex gap-1.5 flex-wrap flex-shrink-0 pt-6 border-b border-[#2f2f2f]">
+        <div className="px-6 sm:px-8 md:px-24 lg:px-48 py-2 flex gap-1.5 flex-wrap flex-shrink-0 pt-6 border-b border-[#2f2f2f]">
           {editTags.map(tag => (
             <span key={tag} className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-sm bg-[#2a2a2a] text-[#a0a0a0] border border-transparent hover:border-[#404040] transition-colors">
               {tag}
@@ -308,7 +308,7 @@ export default function Editor({ note, notes, updateNote, handlePreviewClick, ha
             value={editTitle}
             onChange={(e) => { isLocalChangeRef.current = true; setEditTitle(e.target.value); }}
             placeholder="Untitled"
-            className="bg-transparent text-[42px] font-bold text-[#EBEBEB] placeholder:text-[#3a3a3a] focus:outline-none w-full mb-8 leading-tight resize-none overflow-hidden"
+            className="bg-transparent text-[32px] sm:text-[42px] font-bold text-[#EBEBEB] placeholder:text-[#3a3a3a] focus:outline-none w-full mb-8 leading-tight resize-none overflow-hidden"
           />
 
           {blocks.map((block, index) => (

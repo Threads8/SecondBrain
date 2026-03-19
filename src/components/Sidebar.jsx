@@ -21,101 +21,126 @@ export default function Sidebar({
   setIsAskAIOpen
 }) {
   return (
-    <div className={`${isSidebarOpen ? 'translate-x-0 w-[260px] opacity-100' : '-translate-x-full w-0 opacity-0 overflow-hidden'} transition-all duration-300 ease-out fixed md:relative z-[50] h-full flex-shrink-0 bg-[#202020] flex flex-col shadow-2xl md:shadow-none border-r border-[#2f2f2f]`}>
+    <div className={`
+      ${isSidebarOpen ? 'translate-x-0 w-[260px] opacity-100' : 'md:translate-x-0 md:w-[68px] -translate-x-full w-0 opacity-0 md:opacity-100 overflow-hidden'} 
+      transition-all duration-300 ease-out fixed md:relative z-[50] h-full flex-shrink-0 bg-[#202020] flex flex-col shadow-2xl md:shadow-none border-r border-[#2f2f2f]
+    `}>
       <div className="p-4 flex-shrink-0">
         <div 
-          className="flex items-center gap-2 mb-6 px-1 cursor-pointer group"
-          onClick={() => setIsSidebarOpen(false)}
-          title="Hide Sidebar"
+          className={`flex items-center gap-2 mb-6 px-1 cursor-pointer group transition-all ${!isSidebarOpen ? 'justify-center' : ''}`}
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          title={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
         >
-          <div className="w-6 h-6 bg-indigo-500 rounded flex items-center justify-center shadow-md shadow-indigo-500/20">
+          <div className="w-6 h-6 bg-indigo-500 rounded flex items-center justify-center shadow-md shadow-indigo-500/20 flex-shrink-0">
             <Zap className="w-4 h-4 text-white" />
           </div>
-          <span className="font-semibold text-[15px] tracking-tight text-[#EBEBEB] group-hover:text-white transition-colors">Second Brain</span>
+          {isSidebarOpen && <span className="font-semibold text-[15px] tracking-tight text-[#EBEBEB] group-hover:text-white transition-colors truncate">Second Brain</span>}
         </div>
-        <button onClick={() => setIsSidebarOpen(false)} className="md:hidden p-1.5 text-[#808080] hover:bg-[#2a2a2a] hover:text-white rounded-md transition-colors">
-          <X className="w-4 h-4" />
-        </button>
+        {isSidebarOpen && (
+          <button onClick={() => setIsSidebarOpen(false)} className="md:hidden p-1.5 text-[#808080] hover:bg-[#2a2a2a] hover:text-white rounded-md transition-colors absolute top-4 right-4">
+            <X className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       {/* Action / Search Area */}
-      <div className="px-3 pt-4 pb-2 space-y-3">
-        <div id="tour-search" className="relative group flex items-center">
+      <div className={`px-3 pt-2 pb-2 space-y-3 transition-all ${!isSidebarOpen ? 'px-2' : ''}`}>
+        <div id="tour-search" className={`relative group flex items-center ${!isSidebarOpen ? 'justify-center' : ''}`}>
           {isSearchingAI ? (
-            <Loader2 className="w-3.5 h-3.5 absolute left-3 text-neutral-400 animate-spin" />
+            <Loader2 className={`w-3.5 h-3.5 text-neutral-400 animate-spin ${!isSidebarOpen ? '' : 'absolute left-3'}`} />
           ) : (
-            <Search className={`w-3.5 h-3.5 absolute left-3 ${isSemanticSearch ? 'text-indigo-400' : 'text-[#606060] group-focus-within:text-white transition-colors'}`} />
+            <Search className={`w-3.5 h-3.5 ${isSemanticSearch ? 'text-indigo-400' : 'text-[#606060] group-focus-within:text-white transition-colors'} ${!isSidebarOpen ? '' : 'absolute left-3'}`} />
           )}
 
-          <input
-            type="text"
-            placeholder={isSemanticSearch ? "Ask AI meaning..." : "Search..."}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className={`w-full bg-[#2a2a2a] border rounded-md pl-9 pr-8 py-1.5 text-[13px] font-medium focus:outline-none transition-all placeholder:text-[#606060] ${isSemanticSearch ? 'border-indigo-500/30 text-indigo-100 bg-[#2a2a3a]' : 'border-transparent focus:border-[#404040] text-white hover:bg-[#303030]'}`}
-          />
-          <button
-            onClick={() => setIsSemanticSearch(!isSemanticSearch)}
-            title={isSemanticSearch ? "Disable Semantic Search" : "Enable AI Semantic Search"}
-            className={`absolute right-1.5 p-1 rounded-sm transition-all ${isSemanticSearch ? 'text-indigo-400 hover:text-indigo-300 scale-105' : 'text-[#606060] hover:bg-[#3a3a3a] hover:text-white'}`}
-          >
-            <BrainCircuit className="w-3.5 h-3.5" />
-          </button>
+          {isSidebarOpen && (
+            <input
+              type="text"
+              placeholder={isSemanticSearch ? "Ask AI..." : "Search..."}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={`w-full bg-[#2a2a2a] border rounded-md pl-9 pr-8 py-1.5 text-[13px] font-medium focus:outline-none transition-all placeholder:text-[#606060] ${isSemanticSearch ? 'border-indigo-500/30 text-indigo-100 bg-[#2a2a3a]' : 'border-transparent focus:border-[#404040] text-white hover:bg-[#303030]'}`}
+            />
+          )}
+          {isSidebarOpen && (
+            <button
+              onClick={() => setIsSemanticSearch(!isSemanticSearch)}
+              title={isSemanticSearch ? "Disable Semantic Search" : "Enable AI Semantic Search"}
+              className={`absolute right-1.5 p-1 rounded-sm transition-all ${isSemanticSearch ? 'text-indigo-400 hover:text-indigo-300 scale-105' : 'text-[#606060] hover:bg-[#3a3a3a] hover:text-white'}`}
+            >
+              <BrainCircuit className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
         
-        {isSearchingAI && (
+        {isSearchingAI && isSidebarOpen && (
           <p className="text-[11px] font-medium text-neutral-400 ml-1 flex items-center gap-1.5 animate-pulse">
             <Sparkles className="w-2.5 h-2.5" /> semantic matching...
           </p>
         )}
 
-        <div className="flex gap-1.5">
-          <button id="tour-new-note" onClick={handleCreateNote} className="flex-1 flex items-center justify-center gap-1.5 bg-white hover:bg-neutral-200 text-black py-1.5 rounded-md text-[13px] font-medium transition-all shadow-sm active:scale-[0.98]">
-            <Plus className="w-3.5 h-3.5" /> New Note
+        <div className={`flex gap-1.5 ${!isSidebarOpen ? 'flex-col items-center' : ''}`}>
+          <button 
+            id="tour-new-note" 
+            onClick={handleCreateNote} 
+            title="New Note"
+            className={`flex items-center justify-center gap-1.5 bg-white hover:bg-neutral-200 text-black py-1.5 rounded-md text-[13px] font-medium transition-all shadow-sm active:scale-[0.98] ${!isSidebarOpen ? 'w-10 h-10' : 'flex-1'}`}
+          >
+            <Plus className="w-3.5 h-3.5" /> 
+            {isSidebarOpen && <span>New Note</span>}
           </button>
-          <button id="tour-graph-toggle" onClick={() => setView(view === 'graph' ? 'editor' : 'graph')} className={`p-1.5 rounded-md border transition-all ${view === 'graph' ? 'bg-[#3a3a3a] border-[#404040] text-white shadow-inner' : 'bg-[#2a2a2a] border-transparent text-[#808080] hover:text-white hover:bg-[#303030]'}`} title="Knowledge Graph">
+          <button 
+            id="tour-graph-toggle" 
+            onClick={() => setView(view === 'graph' ? 'editor' : 'graph')} 
+            className={`rounded-md border transition-all ${!isSidebarOpen ? 'w-10 h-10 flex items-center justify-center' : 'p-1.5'} ${view === 'graph' ? 'bg-[#3a3a3a] border-[#404040] text-white shadow-inner' : 'bg-[#2a2a2a] border-transparent text-[#808080] hover:text-white hover:bg-[#303030]'}`} 
+            title="Knowledge Graph"
+          >
             <Network className="w-4 h-4" />
           </button>
         </div>
         <button 
           onClick={() => setIsAskAIOpen(true)} 
-          className="w-full mt-2 flex items-center justify-center gap-1.5 bg-[#1f1f1f] hover:bg-[#252525] border border-[#333] hover:border-[#444] text-[#EBEBEB] py-1.5 rounded-md text-[13px] font-medium transition-all shadow-sm group"
+          title="BrainAi (⌘J)"
+          className={`w-full mt-2 flex items-center justify-center gap-1.5 bg-[#1f1f1f] hover:bg-[#252525] border border-[#333] hover:border-[#444] text-[#EBEBEB] py-1.5 rounded-md text-[13px] font-medium transition-all shadow-sm group ${!isSidebarOpen ? 'h-10' : ''}`}
         >
           <Sparkles className="w-3.5 h-3.5 text-indigo-400 group-hover:text-indigo-300 transition-colors" /> 
-          BrainAi
-          <span className="text-[9px] font-mono text-[#808080] bg-[#111] px-1 py-0.5 rounded ml-1 border border-[#222]">⌘J</span>
+          {isSidebarOpen && <span>BrainAi</span>}
+          {isSidebarOpen && <span className="text-[9px] font-mono text-[#808080] bg-[#111] px-1 py-0.5 rounded ml-1 border border-[#222]">⌘J</span>}
         </button>
       </div>
 
-      <div className="px-4 pb-1 mt-4">
-        <h3 className="text-[11px] font-semibold text-[#808080] uppercase tracking-wider">Private</h3>
+      <div className={`px-4 pb-1 mt-4 ${!isSidebarOpen ? 'text-center px-0' : ''}`}>
+        <h3 className="text-[11px] font-bold text-[#505050] uppercase tracking-widest">{isSidebarOpen ? 'Private' : '•••'}</h3>
       </div>
 
       {/* Notes List */}
       <div className="flex-1 overflow-y-auto scroll-smooth px-2 pb-4 space-y-0.5 custom-scrollbar">
         {filteredNotes.length === 0 ? (
-          <div className="text-center text-[13px] text-[#606060] mt-6 flex flex-col items-center">
-            <BookText className="w-6 h-6 text-[#404040] mb-2" />
-            <p className="font-medium text-[#808080]">No pages found</p>
-          </div>
+          isSidebarOpen && (
+            <div className="text-center text-[13px] text-[#606060] mt-6 flex flex-col items-center">
+              <BookText className="w-6 h-6 text-[#404040] mb-2" />
+              <p className="font-medium text-[#808080]">No pages</p>
+            </div>
+          )
         ) : (
           filteredNotes.map(note => (
             <div
               key={note.id}
               onClick={() => handleNoteSelect(note.id)}
+              title={!isSidebarOpen ? (note.title || 'Untitled') : ''}
               className={`
                 group px-2 py-1.5 rounded-md cursor-pointer transition-colors flex items-center justify-between
                 ${activeNoteId === note.id && view === 'editor'
                   ? 'bg-[#2f2f2f] text-white'
                   : 'bg-transparent text-[#a0a0a0] hover:bg-[#2a2a2a]'}
+                ${!isSidebarOpen ? 'justify-center px-0' : ''}
               `}
             >
-              <div className="flex flex-col min-w-0 flex-1 pr-2">
+              <div className={`flex flex-col min-w-0 flex-1 pr-2 ${!isSidebarOpen ? 'items-center pr-0' : ''}`}>
                 <span className={`text-[14px] truncate leading-tight font-medium ${activeNoteId === note.id && view === 'editor' ? 'text-[#EBEBEB]' : 'text-[#a0a0a0] group-hover:text-[#EBEBEB]'}`}>
-                  {note.title || 'Untitled'}
+                  {isSidebarOpen ? (note.title || 'Untitled') : (note.title?.charAt(0) || 'U')}
                 </span>
                 
-                {(note.tags?.length > 0 || note.links?.length > 0) && (
+                {isSidebarOpen && (note.tags?.length > 0 || note.links?.length > 0) && (
                   <div className="flex items-center gap-1.5 mt-1 opacity-60">
                     {note.tags?.slice(0, 1).map(tag => (
                       <span key={tag} className="text-[9px] px-1 py-0.5 rounded bg-[#3a3a3a] text-[#EBEBEB] border border-[#404040] max-w-[60px] truncate">
@@ -132,30 +157,36 @@ export default function Sidebar({
                 )}
               </div>
               
-              <button
-                onClick={(e) => { e.stopPropagation(); deleteNote(note.id); if (activeNoteId === note.id) setActiveNoteId(null); }}
-                className="opacity-0 group-hover:opacity-100 p-1 text-[#606060] hover:text-red-400 hover:bg-[#3a3a3a] transition-all rounded"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
+              {isSidebarOpen && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); deleteNote(note.id); if (activeNoteId === note.id) setActiveNoteId(null); }}
+                  className="opacity-0 group-hover:opacity-100 p-1 text-[#606060] hover:text-red-400 hover:bg-[#3a3a3a] transition-all rounded"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
           ))
         )}
       </div>
 
       {/* Footer */}
-      <div className="p-3 border-t border-[#2f2f2f] flex-shrink-0 flex flex-col gap-1">
+      <div className={`p-3 border-t border-[#2f2f2f] flex-shrink-0 flex flex-col gap-1 ${!isSidebarOpen ? 'items-center' : ''}`}>
         <button
           onClick={startTutorial}
-          className="flex items-center gap-2 w-full px-2 py-1.5 text-[13px] font-medium text-[#808080] hover:text-white hover:bg-[#2a2a2a] rounded-md transition-colors"
+          title="Quick Tour"
+          className={`flex items-center gap-2 px-2 py-1.5 text-[13px] font-medium text-[#808080] hover:text-white hover:bg-[#2a2a2a] rounded-md transition-colors ${!isSidebarOpen ? 'justify-center w-10 h-10' : 'w-full'}`}
         >
-          <Play className="w-3.5 h-3.5" /> Quick Tour
+          <Play className="w-3.5 h-3.5" />
+          {isSidebarOpen && <span>Quick Tour</span>}
         </button>
         <button
           onClick={() => setIsHelpModalOpen(true)}
-          className="flex items-center gap-2 w-full px-2 py-1.5 text-[13px] font-medium text-[#808080] hover:text-white hover:bg-[#2a2a2a] rounded-md transition-colors"
+          title="About & Manual"
+          className={`flex items-center gap-2 px-2 py-1.5 text-[13px] font-medium text-[#808080] hover:text-white hover:bg-[#2a2a2a] rounded-md transition-colors ${!isSidebarOpen ? 'justify-center w-10 h-10' : 'w-full'}`}
         >
-          <HelpCircle className="w-3.5 h-3.5" /> About & Manual
+          <HelpCircle className="w-3.5 h-3.5" />
+          {isSidebarOpen && <span>Help</span>}
         </button>
       </div>
     </div>

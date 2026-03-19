@@ -99,7 +99,7 @@ ${prompt}`;
               <Bot className="w-8 h-8 text-neutral-200" />
               <div className="absolute top-0 right-0 w-3.5 h-3.5 bg-indigo-500 rounded-full border-2 border-[#1f1f1f]"></div>
             </div>
-            <h1 className="text-[32px] font-bold text-white tracking-tight">How can I help you today?</h1>
+            <h1 className="text-[24px] sm:text-[32px] font-bold text-white tracking-tight">How can I help you today?</h1>
           </div>
         )}
 
