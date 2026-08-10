@@ -26,7 +26,7 @@ const mockVercelApiPlugin = (env) => ({
               method: "POST",
               headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
               body: JSON.stringify({
-                model: "bytedance/seed-oss-36b-instruct",
+                model: "openai/gpt-oss-120b",
                 messages: [
                   { role: "system", content: "You are an AI assistant integrated into a personal knowledge management app. Provide concise, highly relevant, and beautifully formatted responses. Do not wrap tags in markdown if asked for a list. If asked for JSON, respond ONLY with valid JSON." },
                   { role: "user", content: parsed.prompt }
@@ -68,5 +68,8 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       mockVercelApiPlugin(env)
     ],
+    build: {
+      chunkSizeWarningLimit: 1600,
+    }
   };
 })
